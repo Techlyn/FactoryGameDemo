@@ -12,6 +12,8 @@ internal static class Program
     private const int WINDOW_WIDTH = 800;
     private const int WINDOW_HEIGHT = 600;
 
+    private static bool _exit = false;
+
     private const float MARGIN_PERCENT = 0.10f;
     private const float TEXT_SIZE = 20.0f;
     private const float SPACE_SIZE = 1.0f;
@@ -55,7 +57,7 @@ internal static class Program
         Font font = Raylib.LoadFont("Resources/arial.ttf");
         Vector2 MousePos = new Vector2();
         
-        while (!Raylib.WindowShouldClose())
+        while (!_exit)
         {
             MousePos = Raylib.GetMousePosition();
             
@@ -150,6 +152,7 @@ internal static class Program
         if (BoxContainsMouse(textBoxPos, textBoxSize))
         {
             Raylib.DrawRectangle((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Red);
+            
         }
         Raylib.DrawRectangleLines((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Black);
         string text = "Setting";
@@ -166,7 +169,11 @@ internal static class Program
         Vector2 textBoxSize = textBoxInitSize(boxSize);
         if (BoxContainsMouse(textBoxPos, textBoxSize)) 
         { 
-            Raylib.DrawRectangle((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Red); 
+            Raylib.DrawRectangle((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Red);
+            if (Raylib.IsMouseButtonReleased(MouseButton.Left))
+            {
+                _exit = true;
+            }
         }
         Raylib.DrawRectangleLines((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Black);
         
