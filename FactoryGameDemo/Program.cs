@@ -9,8 +9,8 @@ using Raylib_cs;
 internal static class Program
 {
 
-    private const int WINDOW_WIDTH = 1280;
-    private const int WINDOW_HEIGHT = 720;
+    private const int WINDOW_WIDTH = 800;
+    private const int WINDOW_HEIGHT = 600;
 
     private const float MARGIN_PERCENT = 0.10f;
     private const float TEXT_SIZE = 20.0f;
@@ -53,14 +53,17 @@ internal static class Program
     {
         Raylib.InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello Raylib");
         Font font = Raylib.LoadFont("Resources/arial.ttf");
-        
+        Vector2 MousePos = new Vector2();
         
         while (!Raylib.WindowShouldClose())
         {
+            MousePos = Raylib.GetMousePosition();
+            
             Raylib.BeginDrawing();
             Raylib.ClearBackground(BACKGROUND_COLOR);
             Title(font);
             Options(font);
+            MousePosText(font);
             Raylib.EndDrawing();
         }
         Raylib.CloseWindow();
@@ -95,6 +98,10 @@ internal static class Program
     {
         Vector2 textBoxPos = textBoxInitPos(boxPos);
         Vector2 textBoxSize = textBoxInitSize(boxSize);
+        if (BoxContainsMouse(textBoxPos, textBoxSize)) 
+        { 
+            Raylib.DrawRectangle((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Red); 
+        }
         Raylib.DrawRectangleLines((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Black);
         string text = "Continue";
         float fontSize = textBoxSize.Y - 20;
@@ -107,6 +114,10 @@ internal static class Program
         Vector2 textBoxPos = textBoxInitPos(boxPos);
         textBoxPos.Y += boxSize.Y / 5;
         Vector2 textBoxSize = textBoxInitSize(boxSize);
+        if (BoxContainsMouse(textBoxPos, textBoxSize))
+        {
+            Raylib.DrawRectangle((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Red);
+        }
         Raylib.DrawRectangleLines((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Black);
         string text = "New Game";
         float fontSize = textBoxSize.Y - 20;
@@ -119,6 +130,10 @@ internal static class Program
         Vector2 textBoxPos = textBoxInitPos(boxPos);
         textBoxPos.Y += 2 * (boxSize.Y / 5);
         Vector2 textBoxSize = textBoxInitSize(boxSize);
+        if (BoxContainsMouse(textBoxPos, textBoxSize))
+        {
+            Raylib.DrawRectangle((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Red);
+        }
         Raylib.DrawRectangleLines((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Black);
         string text = "Load";
         float fontSize = textBoxSize.Y - 20;
@@ -132,6 +147,10 @@ internal static class Program
         Vector2 textBoxPos = textBoxInitPos(boxPos);
         textBoxPos.Y += pos * (boxSize.Y / 5);
         Vector2 textBoxSize = textBoxInitSize(boxSize);
+        if (BoxContainsMouse(textBoxPos, textBoxSize))
+        {
+            Raylib.DrawRectangle((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Red);
+        }
         Raylib.DrawRectangleLines((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Black);
         string text = "Setting";
         float fontSize = textBoxSize.Y - 20;
@@ -145,12 +164,45 @@ internal static class Program
         Vector2 textBoxPos = textBoxInitPos(boxPos);
         textBoxPos.Y += pos * (boxSize.Y / 5);
         Vector2 textBoxSize = textBoxInitSize(boxSize);
+        if (BoxContainsMouse(textBoxPos, textBoxSize)) 
+        { 
+            Raylib.DrawRectangle((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Red); 
+        }
         Raylib.DrawRectangleLines((int)textBoxPos.X, (int)textBoxPos.Y, (int)textBoxSize.X, (int)textBoxSize.Y, Color.Black);
+        
         string text = "Quit";
         float fontSize = textBoxSize.Y - 20;
         Vector2 newTextPos = textPos(font, text, textBoxPos, textBoxSize, fontSize);
         DrawText(font, text, newTextPos, fontSize);
     }
+
+    private static void MousePosText(Font font)
+    {
+        Vector2 mousePos = Raylib.GetMousePosition();
+        string text = $"Mouse Pos: {mousePos.X}, {mousePos.Y}";
+        
+        
+        Vector2 textPos = TopRight(TextSize(font, text));
+        DrawText(font, text, textPos);
+    }
+
+    private static bool BoxContainsMouse(Vector2 boxPos, Vector2 boxSize)
+    {
+        Vector2 mousePos = Raylib.GetMousePosition();
+        Vector2 corner = boxPos;
+        Vector2 opCorner = boxPos + boxSize;
+
+        if(mousePos.X >= corner.X && mousePos.X <= opCorner.X)
+        {
+            if(mousePos.Y >= corner.Y && mousePos.Y <= opCorner.Y)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
 
 
 
