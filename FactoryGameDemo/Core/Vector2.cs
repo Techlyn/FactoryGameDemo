@@ -19,6 +19,7 @@ namespace FactoryGameDemo.Core
         }
 
         public static Vector2<T> operator +(Vector2<T> a, Vector2<T> b) => new(a.X + b.X, a.Y + b.Y);
+        public static Vector2<T> operator +(Vector2<T> a, T value) => new(a.X + value, a.Y + value);
         public static Vector2<T> operator -(Vector2<T> a, Vector2<T> b) => new(a.X - b.X, a.Y - b.Y);
         public static Vector2<T> operator *(Vector2<T> a, T value) => new(a.X * value, a.Y * value);
         public static Vector2<T> operator /(Vector2<T> a, T value) => new(a.X / value, a.Y / value);

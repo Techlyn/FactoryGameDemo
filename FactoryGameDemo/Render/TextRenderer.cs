@@ -1,28 +1,50 @@
-﻿using System;
+﻿using FactoryGameDemo.Core;
+using FactoryGameDemo.Utility;
+using Raylib_cs;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
-using FactoryGameDemo.Utility;
-using Raylib_cs;
 
 namespace FactoryGameDemo.Render;
 
-public static class TextRenderer
+// Remove textSize from other areas of the program, 
+
+
+
+public class TextRenderer : IDisposable
 {
-    private static Font GetNativeFont(string location)
+    public Font FONT;
+
+
+    public TextRenderer(string resource_path)
     {
-        return Raylib.LoadFont(location);
+        FONT = Raylib.LoadFont(resource_path);
     }
-    public static Core.Vector2<float> Measure( string text, IFont font)
+    
+    public Core.Vector2<float> Measure(string text, float size, float spacing)
     {
-        Font nativeFont = GetNativeFont(font.Location);
-        System.Numerics.Vector2 result = Raylib.MeasureTextEx(nativeFont, text, font.Size, font.Spacing);
+       
+        System.Numerics.Vector2 result = Raylib.MeasureTextEx(FONT, text, size, spacing);
         return new Core.Vector2<float>(result.X, result.Y);
     }
 
-    public static void Draw(string text, IFont font, Core.Vector2<float> position)
+    public void Draw(string text, Core.Vector2<float> pos, float size, float spacing = 1.0f, Color? color = null, bool margin = false)
     {
-        Font nativeFont = GetNativeFont(font.Location);
-        Raylib.DrawTextEx(nativeFont, text,new Vector2(position.X, position.Y), font.Size, font.Spacing, font.Color);
+        Core.Vector2<float> position = pos;
+        position.X -= Measure(text, size, spacing).X / 2;
+        Raylib.DrawTextEx(FONT, text,new Vector2(position.X, position.Y), size, spacing, color ?? Color.Black);
+    }
+
+    public virtual void Draw(string text, Vector2<float> pos, float size, float padding, float spacing = 1, Color? color = null, bool margin = false) 
+        => Draw(text, pos, size, spacing, color, margin);
+    
+
+    
+    
+
+    public void Dispose()
+    {
+        Raylib.UnloadFont(FONT);
     }
 }

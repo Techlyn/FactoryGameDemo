@@ -15,62 +15,68 @@ namespace FactoryGameDemo.Scenes
         private readonly Vector2<float> _windowSize;
 
         private string _titleText = "Factory Game Co";
-        private IFont _fontTitle;
-        private IFont _fontButton;
+
+        private TextBoxRenderer _buttonTextBoxRenderer;
+        private TextRenderer _titleTextRenderer;
         private List<MenuButton> _buttons;
 
 
-        public MainMenuScene()
+        public MainMenuScene(string font_path)
         {
+            if(font_path == null)
+            {
+                Console.WriteLine("font path null, default font path given");
+                font_path = "resources/arial.ttf";
+            }
             _windowSize = new Vector2<float>(Globals.WINDOW_WIDTH, Globals.WINDOW_HEIGHT);
 
-            LoadContent();
-            CalculateLayout();
+            LoadContent(font_path);
+            //CalculateLayout();
         }
 
-        private void LoadContent()
+        private void LoadContent(string font_path)
         {
-            _fontTitle = FontSettings.Create("resources/arial.ttf", size: 40, color: Raylib_cs.Color.Black);
-            _fontButton = FontSettings.Create("resources/arial.ttf", size: 28, color: Raylib_cs.Color.Black);
+            _buttonTextBoxRenderer = new TextBoxRenderer(font_path);
+            _titleTextRenderer = new TextRenderer(font_path);
+
+            
 
             _buttons = new List<MenuButton>
             {
-                new MenuButton("Continue", _fontButton, Input.MseButton.Left),
-                new MenuButton("New Game", _fontButton, Input.MseButton.Left),
-                new MenuButton("Load", _fontButton, Input.MseButton.Left),
-                new MenuButton("Settings", _fontButton, Input.MseButton.Left),
-                new MenuButton("Quit", _fontButton, Input.MseButton.Left),
+                new MenuButton("Continue", _buttonTextBoxRenderer, Input.MseButton.Left),
+                new MenuButton("New Game", _buttonTextBoxRenderer, Input.MseButton.Left),
+                new MenuButton("Load", _buttonTextBoxRenderer, Input.MseButton.Left),
+                new MenuButton("Settings", _buttonTextBoxRenderer, Input.MseButton.Left),
+                new MenuButton("Quit", _buttonTextBoxRenderer, Input.MseButton.Left),
             };
         }
 
-        private void CalculateLayout()
-        {
-            Vector2<float> titleSize = TextRenderer.Measure(_titleText, _fontTitle);
-           
+        //private void CalculateLayout()
+        //{
 
-            const float buttonPadding = 30;
-            float totalButtonsHeight = 0;
-            List<Vector2<float>> buttonSizes = new List<Vector2<float>>();
-            foreach (var btn in _buttons)
-            {
-                var size = TextRenderer.Measure(btn.Text, btn.Font);
-                buttonSizes.Add(size);
-                totalButtonsHeight += size.Y + buttonPadding;
-            }
-            totalButtonsHeight -= buttonPadding;
+        //    const float buttonPadding = 30;
+        //    float totalButtonsHeight = 0;
+        //    List<Vector2<float>> buttonSizes = new List<Vector2<float>>();
+        //    foreach (var btn in _buttons)
+        //    {
+        //        var size = TextRenderer.Measure(btn.Text, btn.Font);
+        //        buttonSizes.Add(size);
+        //        totalButtonsHeight += size.Y + buttonPadding;
+        //    }
+        //    totalButtonsHeight -= buttonPadding;
 
-            Vector2<float> startingPos = LayoutHelper.GetPosition(titleSize, LayoutHelper.Anchor.Center);
-            float startY = startingPos.Y - (totalButtonsHeight / 2);
+        //    Vector2<float> startingPos = LayoutHelper.GetPosition(LayoutHelper.Anchor.Center);
+        //    float startY = startingPos.Y - (totalButtonsHeight / 2);
 
-            for (int i = 0; i < _buttons.Count; i++)
-            {
-                Vector2<float> textSize = buttonSizes[i];
+        //    for (int i = 0; i < _buttons.Count; i++)
+        //    {
+        //        Vector2<float> textSize = buttonSizes[i];
 
-                Vector2<float> buttonPos = new Vector2<float>(startingPos.X - (textSize.X / 2), startY);
-                _buttons[i].SetLayout(buttonPos, textSize);
-                startY += textSize.Y + buttonPadding;
-            }
-        }
+        //        Vector2<float> buttonPos = new Vector2<float>(startingPos.X - (textSize.X / 2), startY);
+        //        _buttons[i].SetLayout(buttonPos, textSize);
+        //        startY += textSize.Y + buttonPadding;
+        //    }
+        //}
 
         public void Update()
         {
@@ -84,17 +90,19 @@ namespace FactoryGameDemo.Scenes
         public void Draw()
         {
             BackgroundColor.ClearBackground(Raylib_cs.Color.White);
+            Vector2<float> titlePos = LayoutHelper.GetPosition(LayoutHelper.Anchor.TopCenter);
+            _titleTextRenderer.Draw(_titleText, titlePos, 40);
 
-            Vector2<float> titleSize = TextRenderer.Measure(_titleText, _fontTitle);
-            Vector2<float> titlePos = LayoutHelper.GetPosition(titleSize, LayoutHelper.Anchor.TopCenter);
-            TextRenderer.Draw(_titleText, _fontButton, titlePos);
+            //const float buttonPadding = 30;
+            //float totalButtonHeight = 0;
 
-            foreach (MenuButton button in _buttons)
-            {
-                button.Draw();
-            }
+            //foreach (MenuButton button in _buttons)
+            //{
+            //    button.Draw();
+            //}
         }
 
 
     }
 }
+ 

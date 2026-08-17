@@ -13,17 +13,17 @@ namespace FactoryGameDemo.Scenes;
 public class MenuButton
 {
     public string Text { get; }
-    public IFont Font { get; }
+    public TextBoxRenderer TextBoxRenderer { get; }
     public Input.MseButton Button { get; }
     public Box? Bounds { get; private set; }
     public Action? OnClick { get; }
     public bool IsHovered { get; private set; }
     public Core.Vector2<float> TextSize { get; private set; }
 
-    public MenuButton(string text,IFont font, Input.MseButton button)
+    public MenuButton(string text,TextBoxRenderer textBoxRenderer, Input.MseButton button)
     {
         Text = text;
-        Font = font;
+        TextBoxRenderer = textBoxRenderer;
         Button = button;
     }
 
@@ -44,7 +44,7 @@ public class MenuButton
         }
     }
 
-    public void Draw()
+    public void Draw(Core.Vector2<float> pos, float size)
     {
         if (Bounds == null) return;
         Color bgColor = IsHovered ? Color.Red : Color.White;
@@ -52,8 +52,8 @@ public class MenuButton
         BoxRenderer.DrawBoxFilled(Bounds, bgColor);
         BoxRenderer.DrawBoxLine(Bounds, Color.Black);
 
-        Core.Vector2<float> textPos = new Core.Vector2<float>(Bounds.Position.X + 20, Bounds.Position.Y + 10);
-        TextRenderer.Draw(Text, Font, textPos);
+        Core.Vector2<float> textPos = new Core.Vector2<float>(Bounds.Position.X + 20, Bounds.Position.Y + 10) + pos;
+        TextBoxRenderer.Draw(Text, textPos, size);
     }
 
 }

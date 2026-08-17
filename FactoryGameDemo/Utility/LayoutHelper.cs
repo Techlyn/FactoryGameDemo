@@ -21,24 +21,23 @@ public static class LayoutHelper
         BottomLeft, BottomCenter, BottomRight,
     }
 
-    public static Vector2<float> GetPosition(Vector2<float> textSize, Anchor anchor)
+    public static Vector2<float> GetPosition(Anchor anchor)
     {
-        Vector2<float> halfSize = textSize / 2;
         Vector2<float> halfWindow = new Vector2<float>(_windowSize.X, _windowSize.Y)/2;
 
         return anchor switch
         {
-            Anchor.TopLeft => _margin,
-            Anchor.TopCenter => new Vector2<float>(halfWindow.X - halfSize.X, _margin.Y),
-            Anchor.TopRight => new Vector2<float>(_windowSize.X - textSize.X - _margin.X, _margin.Y),
+            Anchor.TopLeft => new Vector2<float>(0, 0),
+            Anchor.TopCenter => new Vector2<float>(halfWindow.X, 0),
+            Anchor.TopRight => new Vector2<float>(_windowSize.X, 0),
 
-            Anchor.LeftCenter => new Vector2<float>(_margin.X, halfWindow.Y - halfSize.Y),
-            Anchor.Center => halfWindow - halfSize,
-            Anchor.RightCenter => new Vector2<float>(_windowSize.X - _margin.X - textSize.X, halfWindow.Y - halfSize.Y),
+            Anchor.LeftCenter => new Vector2<float>(0, halfWindow.Y),
+            Anchor.Center => halfWindow,
+            Anchor.RightCenter => new Vector2<float>(_windowSize.X, halfWindow.Y),
 
-            Anchor.BottomLeft => new Vector2<float>(_margin.X, _windowSize.Y - _margin.Y - textSize.Y),
-            Anchor.BottomCenter => new Vector2<float>(halfWindow.X - _margin.X - textSize.X, _windowSize.Y - _margin.Y - textSize.Y),
-            Anchor.BottomRight => new Vector2<float>(_windowSize.X - _margin.X - textSize.X, _windowSize.Y - _margin.Y - textSize.Y),
+            Anchor.BottomLeft => new Vector2<float>(0, _windowSize.Y),
+            Anchor.BottomCenter => new Vector2<float>(halfWindow.X, _windowSize.Y),
+            Anchor.BottomRight => new Vector2<float>(_windowSize.X, _windowSize.Y),
             _ => throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null)
         };
     }

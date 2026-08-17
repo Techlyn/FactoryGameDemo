@@ -21,7 +21,8 @@ internal static class Program
     static void FactoryGameWelcomePageRevised()
     {
         Raylib.InitWindow(Core.Globals.WINDOW_WIDTH, Core.Globals.WINDOW_HEIGHT, "Hello Raylib");
-        MainMenuScene _mainMenu = new MainMenuScene();
+        string font_path = "resources/arial.ttf";
+        MainMenuScene _mainMenu = new MainMenuScene(font_path);
         while (!Raylib.WindowShouldClose())
         {
             _mainMenu.Update();
@@ -29,6 +30,7 @@ internal static class Program
             _mainMenu.Draw();
             Raylib.EndDrawing();
         }
+
         Raylib.CloseWindow();
     }
     
