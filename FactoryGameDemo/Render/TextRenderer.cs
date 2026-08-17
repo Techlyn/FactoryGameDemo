@@ -19,7 +19,8 @@ public class TextRenderer : IDisposable
 
     public TextRenderer(string resource_path)
     {
-        FONT = Raylib.LoadFont(resource_path);
+        FONT = Raylib.LoadFontEx(resource_path, 32, null, 0);
+        Raylib.SetTextureFilter(FONT.Texture, TextureFilter.Point);
     }
     
     public Core.Vector2<float> Measure(string text, float size, float spacing)

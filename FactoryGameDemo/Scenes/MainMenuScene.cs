@@ -7,6 +7,7 @@ using System.Text;
 
 using FactoryGameDemo.Core;
 using System.Drawing;
+using System.Security.Cryptography;
 
 namespace FactoryGameDemo.Scenes
 {
@@ -49,33 +50,27 @@ namespace FactoryGameDemo.Scenes
                 new MenuButton("Settings", _buttonTextBoxRenderer, Input.MseButton.Left),
                 new MenuButton("Quit", _buttonTextBoxRenderer, Input.MseButton.Left),
             };
+
+            //CalculateLayout();
         }
 
         //private void CalculateLayout()
         //{
+        //    Vector2<float> startPos = LayoutHelper.GetPosition(LayoutHelper.Anchor.Center);
+            
+            
+           
 
-        //    const float buttonPadding = 30;
-        //    float totalButtonsHeight = 0;
-        //    List<Vector2<float>> buttonSizes = new List<Vector2<float>>();
-        //    foreach (var btn in _buttons)
+        //    float padding = 30;
+        //    Vector2<float> totalPosMovement = startPos;
+
+        //    foreach (var button in _buttons)
         //    {
-        //        var size = TextRenderer.Measure(btn.Text, btn.Font);
-        //        buttonSizes.Add(size);
-        //        totalButtonsHeight += size.Y + buttonPadding;
+        //        Box box = new Box(totalPosMovement, new Vector2<float>(0,0));
+        //        button.Layout(box);
+                
         //    }
-        //    totalButtonsHeight -= buttonPadding;
-
-        //    Vector2<float> startingPos = LayoutHelper.GetPosition(LayoutHelper.Anchor.Center);
-        //    float startY = startingPos.Y - (totalButtonsHeight / 2);
-
-        //    for (int i = 0; i < _buttons.Count; i++)
-        //    {
-        //        Vector2<float> textSize = buttonSizes[i];
-
-        //        Vector2<float> buttonPos = new Vector2<float>(startingPos.X - (textSize.X / 2), startY);
-        //        _buttons[i].SetLayout(buttonPos, textSize);
-        //        startY += textSize.Y + buttonPadding;
-        //    }
+            
         //}
 
         public void Update()
@@ -100,6 +95,10 @@ namespace FactoryGameDemo.Scenes
             //{
             //    button.Draw();
             //}
+
+            Vector2<float> buttonPos = LayoutHelper.GetPosition(LayoutHelper.Anchor.Center);
+
+            _buttons[0].Draw(buttonPos, 26, 30);
         }
 
 
