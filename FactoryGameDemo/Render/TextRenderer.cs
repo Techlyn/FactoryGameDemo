@@ -37,7 +37,7 @@ public class TextRenderer : IDisposable
         Raylib.DrawTextEx(FONT, text,new Vector2(position.X, position.Y), size, spacing, color ?? Color.Black);
     }
 
-    public virtual void Draw(string text, Vector2<float> pos, float size, float padding, float spacing = 1, Color? color = null, bool margin = false) 
+    public virtual void Draw(string text, Vector2<float> pos, float size, float padding, float spacing = 1, Color? color = null, Color? bgColor = null, bool margin = false) 
         => Draw(text, pos, size, spacing, color, margin);
     
 

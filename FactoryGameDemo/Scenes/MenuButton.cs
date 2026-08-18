@@ -25,6 +25,7 @@ public class MenuButton
         Text = text;
         TextBoxRenderer = textBoxRenderer;
         Button = button;
+        Box = new Box(new Core.Vector2<float>(0, 0), new Core.Vector2<float>(0, 0));
     }
 
     //public void Layout(Box box)
@@ -49,8 +50,8 @@ public class MenuButton
 
         Color bgColor = IsHovered ? Color.Red : Color.White;
 
-        TextBoxRenderer.DrawBoxBackground(bgColor);
-        TextBoxRenderer.Draw(Text, pos, size, padding, spacing, color ?? Color.Black);
+        
+        TextBoxRenderer.Draw(Text, pos, size, padding, spacing, color ?? Color.Black, bgColor);
         
     }
 
