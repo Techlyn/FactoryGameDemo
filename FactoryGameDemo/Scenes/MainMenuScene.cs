@@ -88,17 +88,19 @@ namespace FactoryGameDemo.Scenes
             Vector2<float> titlePos = LayoutHelper.GetPosition(LayoutHelper.Anchor.TopCenter);
             _titleTextRenderer.Draw(_titleText, titlePos, 40);
 
-            //const float buttonPadding = 30;
-            //float totalButtonHeight = 0;
+            Vector2<float> buttonStartPos = LayoutHelper.GetPosition(LayoutHelper.Anchor.Center);
+            buttonStartPos.Y -= _windowSize.Y / 4;
+            const float buttonSpacing = 60;
+            
 
-            //foreach (MenuButton button in _buttons)
-            //{
-            //    button.Draw();
-            //}
+            foreach (MenuButton button in _buttons)
+            {
+                button.Draw(buttonStartPos, 26, 30);
+                buttonStartPos.Y += buttonSpacing;
+            }
+            
 
-            Vector2<float> buttonPos = LayoutHelper.GetPosition(LayoutHelper.Anchor.Center);
-
-            _buttons[0].Draw(buttonPos, 26, 30);
+           
         }
 
 
