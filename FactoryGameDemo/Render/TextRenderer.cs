@@ -12,40 +12,51 @@ namespace FactoryGameDemo.Render;
 
 
 
-public class TextRenderer : IDisposable
+public class TextRenderer
 {
-    public Font FONT;
+    protected TextSettings Settings;
+    protected string Text = "";
+    protected Core.Vector2<float> TextPosition = new Core.Vector2<float>(0,0);
+    protected float FontSize = 30;
+    protected float Spacing = 1;
+    protected Color TextColor = Color.Black;
 
 
-    public TextRenderer(string resource_path)
+    public TextRenderer(TextSettings settings)
     {
-        FONT = Raylib.LoadFontEx(resource_path, 32, null, 0);
-        Raylib.SetTextureFilter(FONT.Texture, TextureFilter.Point);
+        Settings = settings;
+    }
+
+    public virtual void Init(string text, Core.Vector2<float> text_position, float font_size, float spacing = 1.0f, Color? text_color = null)
+    {
+        Text = text;
+        TextPosition = text_position;
+        FontSize = font_size;
+        Spacing = spacing;
+        TextColor = text_color ?? Color.Black;
     }
     
     public Core.Vector2<float> Measure(string text, float size, float spacing)
     {
        
-        System.Numerics.Vector2 result = Raylib.MeasureTextEx(FONT, text, size, spacing);
+        System.Numerics.Vector2 result = Raylib.MeasureTextEx(Settings.FONT, text, size, spacing);
         return new Core.Vector2<float>(result.X, result.Y);
     }
-
-    public void Draw(string text, Core.Vector2<float> pos, float size, float spacing = 1.0f, Color? color = null, bool margin = false)
+    public void CenterOnPosX(string text, float size, float spacing = 1.0f)
     {
-        Core.Vector2<float> position = pos;
-        position.X -= Measure(text, size, spacing).X / 2;
-        Raylib.DrawTextEx(FONT, text,new Vector2(position.X, position.Y), size, spacing, color ?? Color.Black);
+        Vector2<float> textSizeMeasurement = Measure(text, size, spacing);
+        TextPosition.X -= textSizeMeasurement.X / 2;
     }
 
-    public virtual void Draw(string text, Vector2<float> pos, float size, float padding, float spacing = 1, Color? color = null, Color? bgColor = null, bool margin = false) 
-        => Draw(text, pos, size, spacing, color, margin);
-    
-
-    
-    
-
-    public void Dispose()
+    public void CenterOnPosY(string text, float size, float spacing = 1.0f)
     {
-        Raylib.UnloadFont(FONT);
+        Vector2<float> textSizeMeasurement = Measure(text, size, spacing);
+        TextPosition.Y -= textSizeMeasurement.Y / 2;
     }
+
+    public virtual void Draw()
+    {
+        Raylib.DrawTextEx(Settings.FONT, Text, new Vector2(TextPosition.X, TextPosition.Y), FontSize, Spacing, TextColor);
+    }
+
 }

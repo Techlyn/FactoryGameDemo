@@ -5,33 +5,72 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
-namespace FactoryGameDemo.Render
+using static System.Net.Mime.MediaTypeNames;
+namespace FactoryGameDemo.Render;
+
+public class TextBoxRenderer(TextSettings settings) : TextRenderer(settings)
 {
-    public class TextBoxRenderer : TextRenderer
+
+    public Box Box { get; set; } = new Box();
+    protected float Padding = 1.0f;
+    protected Color BackgroundColor = Color.White;
+
+
+    public virtual void Init(string text, Vector2<float> position, float font_size, float padding, float spacing = 1.0f, Color? text_color = null, Color? bgColor = null)
     {
+        base.Init(text, position, font_size, spacing, text_color);
+        Box.Position = position;
+        Padding = padding;
+        BackgroundColor = bgColor ?? Color.White;
 
-        public Box Box { get; private set; }
 
-        public TextBoxRenderer(string resource_path) : base(resource_path)
-        {
-            FONT = Raylib.LoadFontEx(resource_path, 32, null, 0);
-            Raylib.SetTextureFilter(FONT.Texture, TextureFilter.Point);
-            Box = new Box(new Vector2<float>(0, 0), new Vector2<float>(0, 0));
-           
-        }
-
-        public override void Draw(string text, Vector2<float> pos, float size,float padding, float spacing = 1, Color? color = null, Color? bgColor = null, bool margin = false)
-        {
-            Core.Vector2<float> position = pos;
-            Core.Vector2<float> boxSize = Measure(text, size, spacing) + padding;
-            position-= boxSize / 2;
-            Box = new Box(position, boxSize);
-            BoxRenderer.DrawBoxFilled(Box, bgColor ?? Color.Red);
-            BoxRenderer.DrawBoxLine(Box, color ?? Color.Black);
-            position += padding / 2;
-            Raylib.DrawTextEx(FONT, text, new Vector2(position.X, position.Y), size, spacing, color ?? Color.Black);
-        }
-
-        
+        Layout();
     }
+
+    private void Layout()
+    {
+        Core.Vector2<float> textMeasurements = Measure(Text, FontSize, Spacing);
+        Box.Size = textMeasurements;
+        Box.Size += Padding;
+        TextPosition = Box.Position;
+        TextPosition += Padding/2;
+
+    }
+
+    public void CenterTextBox()
+    {
+        Core.Vector2<float> newPosition = Box.Position;
+        newPosition -= Box.Size/2;
+        Box.Position = newPosition;
+        TextPosition = Box.Position;
+        TextPosition += Box.Size / 2;
+        Core.Vector2<float> textMeasurements = Measure(Text, FontSize, Spacing);
+        TextPosition -= textMeasurements / 2;
+    }
+
+    public void CenterTextBoxX()
+    {
+        Core.Vector2<float> newPosition = Box.Position;
+        newPosition.X -= Box.Size.X / 2;
+        Box.Position = newPosition;
+        TextPosition.X = newPosition.X;
+        TextPosition.X += Padding / 2;
+    }
+    public void CenterToxBoxY()
+    {
+        Core.Vector2<float> newPosition = Box.Position;
+        newPosition.Y -= Box.Size.Y / 2;
+        Box.Position = newPosition;
+        TextPosition.Y = newPosition.Y;
+        TextPosition.Y += Padding / 2;
+    }
+
+    public virtual void Draw()
+    {
+        BoxRenderer.DrawBoxFilled(Box, BackgroundColor);
+        BoxRenderer.DrawBoxLine(Box, TextColor);
+        base.Draw();
+    }
+
+    
 }
